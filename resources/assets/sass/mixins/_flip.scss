@@ -1,0 +1,83 @@
+@mixin flip($width, $height, $background_front, $background_back, $color) {
+	.flip_container {
+		width: $width;
+		min-height: $height + 10px;
+		perspective: 1000;
+		-webkit-perspective: 1000;
+		float: left;
+		&:hover,
+		&.hover {
+			cursor: pointer;
+			.flipper {
+				transform: rotateY(180deg);
+			}
+		}
+		.front,
+		.back {
+			width: $width;
+			height: $height;
+			border-radius: 30px;
+			padding: 25px 18px;
+		}
+		.front {
+			color: $color;
+			background-color: $background_front;
+			.icon {
+				margin: auto;
+                max-width: 128px;
+                max-height: 128px;
+                min-width: 100px;
+                min-height: 100px;
+			}
+			.title {
+				font-weight: bold;
+				font-size: 16px;
+				text-align: center;
+				text-transform: uppercase;
+				margin-top: 10px;
+			}
+		}
+		.back {
+			padding-top: 15px;
+			color: $text_color;
+			background-color: $background_back;
+			.text {
+				.heading {
+					font-weight: bold;
+					font-size: 14px;
+					text-align: center;
+					text-transform: uppercase;
+				}
+				p {
+					text-align: justify;
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+	/* flip speed goes here */
+	.flipper {
+		transition: 0.6s;
+		transform-style: preserve-3d;
+		position: relative;
+	}
+	/* hide back of pane during swap */
+	.front,
+	.back {
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	/* front pane, placed above back */
+	.front {
+		z-index: 2;
+		/* for firefox 31 */
+		transform: rotateY(0deg);
+	}
+	/* back, initially hidden pane */
+	.back {
+		transform: rotateY(180deg);
+	}
+}

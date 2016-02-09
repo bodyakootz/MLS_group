@@ -1,0 +1,57 @@
+header {
+	.navbar {
+		max-height: 100px;
+		height: 100px;
+	}
+	.logo {
+		float: left;
+		img {
+			max-width: 151px;
+		}
+	}
+	.navbar-collapse {
+		float: right;
+		.langs {
+			float: right;
+		}
+	}
+	.navbar-nav {
+		li {
+			a{
+				font-size: 16px;
+				text-transform: uppercase;
+				color: $text_color;
+				padding: 36px 30px 30px 30px;
+				&:hover {
+					color: $accent_color;
+					text-decoration: none;
+					background-color: transparent;
+				}
+			}
+			&.active {
+				a {
+					color: $accent_color;
+				}
+			}
+		}
+	}
+	.langs {
+		margin-top: 35px;
+		a {
+			color: $light_text_color;
+			text-transform: uppercase;
+			text-decoration: none;
+			font-size: 16px;
+			border-right: 1px solid $light_text_color;
+			padding: 0 5px;
+			&:last-child {
+				border-right: none;
+			}
+			&:hover,
+			&.active {
+				color: $accent_color;
+				text-decoration: underline;
+			}
+		}
+	}
+}

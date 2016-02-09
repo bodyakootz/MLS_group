@@ -1,0 +1,12 @@
+.btn {
+	text-transform: uppercase;
+	background-color: $light_accent_color;
+	color: #fff;
+	padding: 10px;
+	border-radius: 0px;
+	&:hover {
+		text-decoration: none;
+		background-color: $accent_color;
+		color: #fff;
+	}
+}

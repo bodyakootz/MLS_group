@@ -1,0 +1,27 @@
+// CORE
+$browser-prefixes: true !default;
+@import "assets/juice";
+// MIXINS
+@import "assets/mixins";
+// VARIABLES
+@import "assets/variables";
+@import "assets/colors";
+// HELPERS
+@import "assets/helpers";
+//GENERAL
+@import "partials/general";
+// PARTIALS
+@import "partials/header";
+@import "partials/footer";
+// PAGES
+@import "pages/main";
+@import "pages/about";
+@import "pages/articles";
+@import "pages/article";
+@import "pages/services";
+@import "pages/service";
+@import "pages/contacts";
+// @import "header";
+// @import "header";
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
