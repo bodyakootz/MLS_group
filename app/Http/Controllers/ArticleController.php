@@ -58,6 +58,8 @@ class ArticleController extends Controller {
         $same = $articles->getSameArticles($lang, 4, $article->category_code, $article->article_id);
         return v()->with([
             'article'       => $article,
+            'nav_id'        => $article->article_id,
+            'nav_url'       => s($article->title),
             'same_articles' => $same,
             'text'          => $texts,
             'lang'          => $this->getLang($lang),
@@ -66,10 +68,17 @@ class ArticleController extends Controller {
         ]);
     }
     public function admin_articles() {
-        $articles= Article::all();
+        $articles = new Article();
+        $articles= $articles->getAllArticles();
         return v()->with([
            'articles'   => $articles,
         ]);
+    }
+    public function delete_article($article_id, $lang) {
+        $article = new Article();
+        $message = $article->deleteArticle($article_id, $lang);
+        session()->flash('message', $message); //TODO:: fix this fucking problem with session!!!!!!!!!!
+        return redirect()->back();
     }
     public function change_article($article_id) {
         $article = Article::find($article_id);
@@ -83,10 +92,9 @@ class ArticleController extends Controller {
         $estate = Article::find($data['article_id'])->update($data);
         return redirect()->back()->with('message', "Новость \"{$article->title}\" #{$article->article_id} изменена успешно!");
     }
+    public function create_article() {
 
-    public function delete_article($article_id) {
-        $article = Article::find($article_id);
-        $article->delete();
-        return redirect()->back()->with('message', "Новость \"{$article->title}\" #{$article->article_id} удалена успешно!");
+        return v();
     }
+
 }

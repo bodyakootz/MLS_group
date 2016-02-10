@@ -1,45 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Laravel</title>
+@extends('layouts/admin_layout')
+@extends('admin/partials/header')
+@extends('admin/partials/navbar')
+@extends('admin/partials/footer')
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            display: table;
-            font-weight: 100;
-            font-family: 'Lato';
-        }
-
-        .container {
-            text-align: center;
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .content {
-            text-align: center;
-            display: inline-block;
-        }
-
-        .title {
-            font-size: 96px;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="content">
-        <div class="title">This is feedback</div>
-    </div>
-</div>
-</body>
-</html>
+@section('body')
+    <main class="articles">
+        <div class="index_inner">
+            <div class="container">
+                <div class="main_content col-lg-12">
+                    @if (Session::has('message'))
+                        <div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <p>{!! session()->get('message') !!}</p>
+                        </div>
+                    @endif
+                    <div class="general_heading_articles col-lg-offset-3">
+                        <h2 class="heading">Сообщения</h2>
+                    </div>
+                    <div class="collects col-lg-6 col-lg-offset-3">
+                        @if(empty($feedbacks[0]))
+                            <p class="empty">Сообщений нет:(</p>
+                        @else
+                            @foreach ($feedbacks as $feedback)
+                                <div class="one_collect">
+                                    <div class="heading">
+                                        <p class="date">{{$feedback->date}}</p>
+                                        {!!Form::open(['url'=>'/admin/delete_feedback/'.$feedback->feedback_id, 'method'=>'POST', 'class'=>'contact_form'])!!}
+                                        <i class="fa fa-times delete_article"></i>
+                                        {!!Form::close()!!}
+                                        <p>от &nbsp;&nbsp;{{$feedback->name}}</p>
+                                    </div>
+                                    <div class="body">
+                                        <div class="response_block">
+                                            <p class="response_to">Ответить</p>
+                                            <a href="mailto:{{$feedback->email}}" class="response">{{$feedback->email}}</a>
+                                        </div>
+                                        <p class="message">{{$feedback->message}}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection

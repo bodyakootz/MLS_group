@@ -9,6 +9,7 @@ function v() {
         'about'             => 'about',
         'contacts'          => 'contacts',
         'change_article'    =>'admin/article_change',
+        'new_article'       =>'admin/article_change',
         'create_article'	=> null,
         'admin_articles'	=> 'admin/articles',
         'articles'			=> 'articles',
@@ -22,6 +23,7 @@ function v() {
         'logging'			=> null,
         'logout'			=> null,
         'admin_feedback'    =>'admin/feedback',
+        'admin_collect'     =>'admin/collects',
         'admin_subscribers' =>'admin/subscribers',
         'error_c'             =>'errors/404',
 

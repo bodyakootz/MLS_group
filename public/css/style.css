@@ -1034,7 +1034,9 @@ main {
   color: #1d1d1d;
   font-size: 14px;
   text-transform: uppercase;
-  line-height: 1; }
+  line-height: 1;
+  width: 100%;
+  margin-bottom: 10px; }
   .article .sidebar .one_category:hover, .article .sidebar .one_category.active {
     cursor: pointer;
     background-color: #f88c3c;

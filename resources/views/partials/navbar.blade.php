@@ -40,9 +40,9 @@
 					  <a href="{{l(r(), [$category, $category_name, 'ru'])}}" class="@if ($lang === 'ru') active @endif">RU</a>
 					  <a href="{{l(r(), [$category, $category_name, 'en'])}}" class="@if ($lang === 'en') active @endif">EN</a>
 				  @elseif (r() === 'article')
-					  <a href="{{l(r(), [$article->article_id, s($article->title), 'ua'])}}" class="@if ($lang === 'ua') active @endif">UA</a>
-					  <a href="{{l(r(), [$article->article_id, s($article->title), 'ru'])}}" class="@if ($lang === 'ru') active @endif">RU</a>
-					  <a href="{{l(r(), [$article->article_id, s($article->title), 'en'])}}" class="@if ($lang === 'en') active @endif">EN</a>
+					  <a href="{{l(r(), [$nav_id, $nav_url, 'ua'])}}" class="@if ($lang === 'ua') active @endif">UA</a>
+					  <a href="{{l(r(), [$nav_id, $nav_url, 'ru'])}}" class="@if ($lang === 'ru') active @endif">RU</a>
+					  <a href="{{l(r(), [$nav_id, $nav_url, 'en'])}}" class="@if ($lang === 'en') active @endif">EN</a>
 				  @else
 					  <a href="{{l(r(), 'ua')}}" class="@if ($lang === 'ua') active @endif">UA</a>
 					  <a href="{{l(r(), 'ru')}}" class="@if ($lang === 'ru') active @endif">RU</a>

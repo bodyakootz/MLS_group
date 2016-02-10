@@ -4,6 +4,18 @@
 @extends('/partials/footer')
 
 @section('body')
+	@if (Session::has('message'))
+		<div class="alert alert-info">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+			@if(Session::get('message'))
+				<p>{{$text->message_send}}</p>
+			@else
+				<p>{{$text->message_fail}}</p>
+			@endif
+
+		</div>
+	@endif
     <main>
     	<div class="container">
     		<div class="main_content col-lg-6">
@@ -92,15 +104,15 @@
 		    			{!!Form::open(['url'=>'/feedback', 'method'=>'POST', 'class'=>'contact_form'])!!}
 		    				<div class="inner_form_block">
 		    					<div class="name">
-									{!! Form::text('name', null, ['class'=>'', 'id'=>'name'])!!}
+									{!! Form::text('name', null, ['class'=>'', 'id'=>'name', 'required'=>'required'])!!}
 									<label for="name" class="placeholder">{{$text->form_name}}</label>
 								</div>
 		    					<div class="email">
-									{!! Form::email('email', null, ['class'=>'', 'id'=>'email'])!!}
+									{!! Form::email('email', null, ['class'=>'', 'id'=>'email', 'required'=>'required'])!!}
 									<label for="email" class="placeholder">{{$text->form_email}}</label>
 								</div>
 		    					<div class="text_message">
-									{!! Form::textarea('text_message', null, ['class'=>'', 'id'=>'message', 'rows'=>'3'])!!}
+									{!! Form::textarea('text_message', null, ['class'=>'', 'id'=>'message', 'rows'=>'3', 'required'=>'required'])!!}
 									<label for="message" class="placeholder">{{$text->form_message}}</label>
 								</div>
 		    					<div class="send">

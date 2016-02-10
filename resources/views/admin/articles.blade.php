@@ -1,53 +1,64 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Laravel</title>
+@extends('layouts/admin_layout')
+@extends('admin/partials/header')
+@extends('admin/partials/navbar')
+@extends('admin/partials/footer')
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            display: table;
-            font-weight: 100;
-            font-family: 'Lato';
-        }
-
-        .container {
-            text-align: center;
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .content {
-            text-align: center;
-            display: inline-block;
-        }
-
-        .title {
-            font-size: 96px;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="content">
-        <div class="title">This is admin articles</div>
-        @foreach($articles as $article)
-            <p>{{$article->title}}</p>
-            <p>{{$article->date}}</p>
-            <p>{{$article->body}}</p>
-            <p>{{$article->category}}</p>
-            <p>{{$article->preview}}</p>
-            <p>{{$article->language}}</p>
-        @endforeach
-    </div>
-</div>
-</body>
-</html>
+@section('body')
+    <main class="articles">
+        <div class="index_inner">
+            <div class="container">
+                <div class="main_content col-lg-12">
+                    {{--@if (Session::has('message'))--}}
+                        {{--<div class="alert alert-info">--}}
+                            {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
+                            {{--<p>{!! session()->get('message') !!}</p>--}}
+                        {{--</div>--}}
+                    {{--@else--}}
+                        {{--<p>no</p>--}}
+                    {{--@endif--}}
+                    <div class="general_heading_articles">
+                        <h2 class="heading">Статьи</h2>
+                    </div>
+                    <div class="articles">
+                        @if(empty($articles[0]))
+                            <p class="empty">Статей нет:(</p>
+                            <a class="back btn" href="#" onclick="backAway()">Назад</a>
+                        @else
+                            @foreach ($articles as $article)
+                                <div class="one_new col-lg-3">
+                                    <div class="img_block">
+                                        @if (isset($article->image) && $article->image != '')
+                                            {!!HTML::image("img/articles/$article->image", "$article->title")!!}
+                                        @else
+                                            {!!HTML::image("img/articles/no_image.jpg", "$article->title")!!}
+                                        @endif
+                                    </div>
+                                    <div class="content">
+                                        <div class="heading_block">
+                                            <a href="{{l('article', [$article->article_id, s($article->title), $article->lang_code])}}" class="heading">{{$article->title}}</a>
+                                        </div>
+                                        <div class="date">
+                                            <p>{{$article->date}}</p>
+                                        </div>
+                                        <div class="preview">
+                                            <p>{{$article->preview_text}}</p>
+                                        </div>
+                                        <div class="more">
+                                            <a href="{{l('change_article', [$article->article_id, $article->lang_code])}}" class="btn">Изменить</a>
+                                            {!!Form::open(['url'=>'/admin/delete_article/'.$article->article_id.'/'.$article->lang_code, 'method'=>'POST', 'class'=>'contact_form'])!!}
+                                                <a href="#" class="btn delete_article">Удалить</a>
+                                            {!!Form::close()!!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="pagination_block">
+                    {!! $articles->links() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection

@@ -60,9 +60,42 @@ class Article extends BaseModel {
             ->join('contents', 'articles.article_id', '=', 'contents.article_id')
             ->join('languages', 'contents.lang_id', '=', 'languages.id')
             ->get();
-//        print_r($article[0]);
+//        print_r($article);
 //        exit;
         return $article[0];
+    }
+
+    public function deleteArticle ($article_id, $lang) {
+        $content = DB::table('contents')
+            ->join('languages', 'contents.lang_id', '=', 'languages.id')
+            ->where('article_id', $article_id)
+            ->where('lang_code', $lang)
+            ->delete();
+        if ($content) {
+            $article = DB::table('articles')
+                ->join('contents', 'articles.article_id', '=', 'contents.article_id')
+                ->where('articles.article_id', $article_id)
+                ->get();
+            if (!isset($article[0])) {
+                $article = DB::table('articles')
+                    ->where('article_id', $article_id)
+                    ->delete();
+                return $message='Статья удалена!';
+            } else {
+                return $message='Перевод удален!';
+            }
+        } else {
+            return $message='При удалении произошла ошибка, попробуйле еще раз!';
+        }
+    }
+
+    public function getAllArticles() {
+        $articles = DB::table('articles')
+            ->join('contents', 'articles.article_id', '=', 'contents.article_id')
+            ->join('languages', 'contents.lang_id', '=', 'languages.id')
+            ->orderBy('date', 'desc')
+            ->paginate(12);
+        return $articles;
     }
 
 }

@@ -27,35 +27,38 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('auth/login',    ['as'=>'login', 'uses'=>'Auth\AuthController@getLogin']);
     Route::post('auth/login',   ['as'=>'login_post', 'uses'=>'Auth\AuthController@postLogin']);
     Route::get('auth/logout',   ['as'=>'logout', 'uses'=>'MainController@logout']);
+    //ARTICLES
+    Route::post('/admin/create_article',				                        ['as'=>'create_article', 'uses'=>'ArticleController@create_article', 'middleware'=>'auth']); // redirect
+    Route::get('/admin/new_article',				                            ['as'=>'new_article', 'uses'=>'ArticleController@new_article', 'middleware'=>'auth']); // redirect
+    Route::get('/admin/articles', 						                        ['as'=>'admin_articles', 'uses'=>'ArticleController@admin_articles', 'middleware'=>'auth']); // articles (with delete form + change link)
+    Route::get('/articles/{category}/{category_name}/{lang?}',                  ['as'=>'articles', 		 'uses'=>'ArticleController@articles']); // articles
+    Route::get('/article/{article_id}/{article}/{lang?}',                       ['as'=>'article', 		 'uses'=>'ArticleController@article']); // article
+    Route::get('/admin/change_article/{article_id}/{article_lang}', 	        ['as'=>'change_article', 'uses'=>'ArticleController@change_article', 'middleware'=>'auth']); // article_change (links)
+    Route::post('/admin/update_article/', 	                                    ['as'=>'update_article', 'uses'=>'ArticleController@update_article', 'middleware'=>'auth']); // redirect
+    Route::post('/admin/delete_article/{article_id}/{article_lang}', 	        ['as'=>'delete_article', 'uses'=>'ArticleController@delete_article', 'middleware'=>'auth']); // redirect->with
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/admin',                ['as'=>'admin',             'uses'=>'MainController@admin']); // admin
-    Route::get('/admin/feedback', 		['as'=>'admin_feedback', 	'uses'=>'MainController@admin_feedback']); // admin
-    Route::get('/admin/subscribers', 	['as'=>'admin_subscribers', 'uses'=>'MainController@admin_subscribers']); // admin
+    Route::get('/admin',                                ['as'=>'admin',             'uses'=>'MainController@admin']); // admin
+    Route::get('/admin/feedback', 		                ['as'=>'admin_feedback', 	'uses'=>'MainController@admin_feedback']); // admin
+    Route::post('/admin/delete_feedback/{feedback_id}', ['as'=>'delete_feedback',   'uses'=>'MainController@delete_feedback']); // admin
+    Route::get('/admin/collect', 	                    ['as'=>'admin_collect',     'uses'=>'MainController@admin_collect']); // admin
+    Route::post('/admin/delete_collect/{collect_id}', 	['as'=>'delete_collect',    'uses'=>'MainController@delete_collect']); // admin
 });
-
-//INTERACTIONS
-Route::post('/feedback',    ['as'=>'feedback',  'uses'=>'MainController@feedback']);
-Route::post('/collect',     ['as'=>'collect',   'uses'=>'MainController@collect']);
-
-
-//ARTICLES
-Route::post('/admin/create_article',				        ['as'=>'create_article', 'uses'=>'ArticleController@create_article', 'middleware'=>'auth']); // redirect
-Route::get('/admin/articles', 						        ['as'=>'admin_articles', 'uses'=>'ArticleController@admin_articles', 'middleware'=>'auth']); // articles (with delete form + change link)
-Route::get('/articles/{category}/{category_name}/{lang?}',   ['as'=>'articles', 		 'uses'=>'ArticleController@articles']); // articles
-Route::get('/article/{article_id}/{article}/{lang?}',      ['as'=>'article', 		 'uses'=>'ArticleController@article']); // article
-Route::get('/admin/change_article/{article_id}', 	        ['as'=>'change_article', 'uses'=>'ArticleController@change_article', 'middleware'=>'auth']); // article_change (links)
-Route::post('/admin/update_article/', 	                    ['as'=>'update_article', 'uses'=>'ArticleController@update_article', 'middleware'=>'auth']); // redirect
-Route::post('/admin/delete_article/{article_id}', 	        ['as'=>'delete_article', 'uses'=>'ArticleController@delete_article', 'middleware'=>'auth']); // redirect->with
 
 //SERVICES
 Route::get('/services/{lang?}',           ['as'=>'services',      'uses'=>'MainController@services']);
 Route::get('/services/{service}/{lang?}', ['as'=>'service',       'uses'=>'MainController@service']);
 
 //STATIC PAGES
+Route::group(['middleware' => ['web']], function () {
+    //INTERACTIONS
+    Route::post('/feedback',            ['as'=>'feedback',      'uses'=>'MainController@feedback']);
+    Route::post('/collect',             ['as'=>'collect',       'uses'=>'MainController@collect']);
+    Route::get('/contacts/{lang?}',     ['as'=>'contacts',      'uses'=>'MainController@contacts']);
+    Route::get('/{lang?}',              ['as'=>'index',          'uses'=>'MainController@index']);
+
+});
 Route::get('/about/{lang?}',     ['as'=>'about',          'uses'=>'MainController@about']);
-Route::get('/contacts/{lang?}',  ['as'=>'contacts',       'uses'=>'MainController@contacts']);
 //Route::get('/error',             ['as'=>'error_c',          'uses'=>'MainController@error']);
-Route::get('/{lang?}',           ['as'=>'index',          'uses'=>'MainController@index']);
 

@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use App\Collect;
+use App\Feedback;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
 use Mail;
 use Request;
+use Flash;
 use App\Article;
 use App\Counter;
 use File;
@@ -106,10 +108,39 @@ class MainController extends Controller {
         } else {
             $thanks = false;
         }
-//        TODO::add send mail here;
-        return back()->withMessage([
-            'message' => $thanks,
-            ]);
+        $this->sendEmailToAdmin(['email' => $email], 'collect');
+        session()->flash('message', $thanks);
+        return redirect('contacts');
+    }
+    public function feedback() {
+        $email = htmlentities($_POST['email']);
+        $name = htmlentities($_POST['name']);
+        $message = htmlentities($_POST['text_message']);
+        $feedback = new Feedback();
+        $feedback->email = $email;
+        $feedback->name = $name;
+        $feedback->message = $message;
+        if($feedback->save()) {
+            $thanks = true;
+        } else {
+            $thanks = false;
+        }
+        $this->sendEmailToAdmin(['email' => $email, 'name' => $name, 'message_text' => $message], 'feedback');
+        session()->flash('message', $thanks);
+        return redirect()->back();
+    }
+    private function sendEmailToAdmin($data, $type) {
+        if ($type === 'collect') {
+            Mail::send('emails.'.$type, $data, function($message) {
+                $message->from('site@mlsgroup.com', 'Сообщение с сайта');
+                $message->to('bodyakootz@gmail.com')->subject('Были сотавлены контакнтые данные!');
+            });
+        } else {
+            Mail::send('emails.'.$type, $data, function($message) {
+                $message->from('site@mlsgroup.com', 'Сообщение с сайта');
+                $message->to('bodyakootz@gmail.com')->subject('Было оставлено сообщение на сайте!');
+            });
+        }
     }
     public function service($service, $lang='ua') {
         if ($this->getTexts($lang)) {
@@ -137,5 +168,39 @@ class MainController extends Controller {
     public function logout() {
         Auth::logout();
         return redirect('/');
+    }
+     public function admin_collect() {
+         $collects = Collect::orderBy('date', 'desc')->get();
+//         $collects->orderBy('date', 'desc');
+         return v()->with([
+             'collects' => $collects,
+         ]);
+     }
+    public function delete_collect($collect_id) {
+        $collect = Collect::find($collect_id);
+        if($collect->delete()) {
+            $message='Контакт удален!';
+        } else {
+            $message='Произошла ошибка, попробуйте снова!';
+        }
+        session()->flash('message', $message);
+        return redirect()->back();
+    }
+    public function admin_feedback() {
+        $feedbacks = Feedback::orderBy('date', 'desc')->get();
+        return v()->with([
+            'feedbacks' => $feedbacks,
+        ]);
+
+    }
+    public function delete_feedback($feedback_id) {
+        $feedback = Feedback::find($feedback_id);
+        if($feedback->delete()) {
+            $message='Сообщение удалено!';
+        } else {
+            $message='Произошла ошибка, попробуйте снова!';
+        }
+        session()->flash('message', $message);
+        return redirect()->back();
     }
 }
